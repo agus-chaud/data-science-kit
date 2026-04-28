@@ -1,14 +1,13 @@
-# 🤖 Data Science Kit — Skills para Claude Code
+#  Data Science Kit — Skills para Claude Code o Cursor
 
-Un conjunto de skills especializadas para [Claude Code](https://claude.ai/code) que le dan **disciplina basada en roles** a los proyectos de data science. Cada skill codifica las responsabilidades, restricciones y flujo de trabajo de una fase específica del proceso — previniendo los errores más comunes por diseño.
+Un conjunto de skills especializadas que le dan **disciplina basada en roles** a los proyectos de data science. Cada skill codifica las responsabilidades, restricciones y flujo de trabajo de una fase específica del proceso , evitando los errores más comunes.
 
 ## El problema
 
-Los proyectos de data science fallan de maneras predecibles:
-- El EDA se mezcla con el feature engineering que se mezcla con el modelado — nadie sabe quién es responsable de qué
-- El leakage se introduce sin que nadie lo detecte hasta producción
-- Los modelos se eligen por intuición, no por un criterio escrito antes de ver los resultados
-- El reporte final es un documento técnico que ningún ejecutivo va a leer
+Los proyectos de data science suelen fallar en estas partes:
+- El EDA se mezcla con el feature engineering que se mezcla con el modelado , nadie sabe quién es responsable de qué
+- El leakage no se detecta hasta llegar a producción
+- No hay reporte final que resuma los insights
 
 Estas skills resuelven eso dándole a cada fase un **contrato estricto**: qué lee, qué escribe, qué tiene prohibido hacer, y cómo hace el handoff al siguiente agente.
 
