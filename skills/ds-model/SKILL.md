@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide entrenar modelos, comparar algoritmos, ajustar hiperparámetros, seleccionar features, o dice "/ds-model", "entrenar", "modelar", "comparar modelos".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0"
 ---
 

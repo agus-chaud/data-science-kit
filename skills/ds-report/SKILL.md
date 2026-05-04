@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide reporte ejecutivo, resumen para gerencia, traducir resultados, o dice "/ds-report", "escribí el reporte", "resumí los resultados", "preparar presentación ejecutiva".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0"
 ---
 

@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## When to Use
@@ -242,3 +242,7 @@ Archivo: `reports/handoff_to_modeler.md`
 - Cuando un insight es tautológico: descartarlo sin rodeos — "Eso no es un hallazgo, es repetir el label."
 - Al proponer el plan de EDA: presentar trade-offs con energía, no como burocracia.
 - **STOP obligatorio** en Fase 1 y Fase 2 — esperar respuesta del usuario antes de continuar.
+
+## Complemento: skill `ds-stats`
+
+Para **elección o interpretación profunda** de tests, **intervalos de confianza** y **diseño inferencial** (α/p-valor, colas, TLC, muestreo, marco de hipótesis más allá de la tabla operativa de esta skill), usar la skill **`ds-stats`** — sin duplicar aquí ese marco teórico.

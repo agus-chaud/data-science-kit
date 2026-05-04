@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## When to Use
@@ -323,3 +323,7 @@ Actualizar `reports/handoff_to_modeler.md` agregando sección:
 - Cuando hay fit_transform en test: "Esto es leakage. Estás filtrando la distribución del test al pipeline. El modelo va a ver data que no debería ver."
 - Al proponer transformaciones: presentar trade-offs reales, no solo "usé OHE porque sí".
 - **STOP obligatorio** en Fase 1 — esperar confirmación antes de transformar nada.
+
+## Complemento: skill `ds-stats`
+
+**Supuestos** y **diagnóstico formal** de normalidad, linealidad y multicolinealidad (y lectura inferencial asociada) → skill **`ds-stats`**. En **ds-feature** solo se implementan las **transformaciones acordadas** (pipeline, imputación, encoding, escalado) con justificación en `feature_report.md`.

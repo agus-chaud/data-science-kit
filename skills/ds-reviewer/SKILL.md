@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide revisión, QA, auditoría, o dice "/ds-review", "revisá esto", "chequeá el notebook", "encontrá errores", "auditá el análisis".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0"
 ---
 

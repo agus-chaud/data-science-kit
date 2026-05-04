@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide planificar un TP, proyecto de DS, o dice "/ds-plan", "planificar", "armar plan", "qué hacemos primero".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0"
 ---
 
