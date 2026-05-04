@@ -1,25 +1,33 @@
-#  Data Science Kit — Skills para Claude Code o Cursor
+#  Data Science Kit 
 
-Un conjunto de skills especializadas que le dan **disciplina basada en roles** a los proyectos de data science. Cada skill codifica las responsabilidades, restricciones y flujo de trabajo de una fase específica del proceso , evitando los errores más comunes.
+ Conjunto de skills especializadas que dan disciplina basada en roles a los proyectos de data science. Cada skill codifica las responsabilidades, restricciones y flujo de trabajo de una fase específica del proceso , previniendo los errores más comunes por diseño.
 
 ## El problema
 
-Los proyectos de data science suelen fallar en estas partes:
+Los proyectos de data science fallan de maneras predecibles:
 - El EDA se mezcla con el feature engineering que se mezcla con el modelado , nadie sabe quién es responsable de qué
-- El leakage no se detecta hasta llegar a producción
-- No hay reporte final que resuma los insights
+- El leakage se introduce sin que nadie lo detecte hasta producción
+- Los modelos se eligen por intuición, no por un criterio escrito antes de ver los resultados
+- El reporte final es un documento técnico que ningún ejecutivo entiende
 
 Estas skills resuelven eso dándole a cada fase un **contrato estricto**: qué lee, qué escribe, qué tiene prohibido hacer, y cómo hace el handoff al siguiente agente.
 
 ## El ecosistema
 
 ```
-ds-planner → ds-explorer → ds-feature → ds-model → ds-reviewer → ds-report
+ds-env-bootstrap --> ds-planner --> ds-explorer --> ds-feature --> ds-model --> ds-reviewer --> ds-report
 ```
 
 ---
 
 ## Skills
+
+### `ds-env-bootstrap` — Entorno reproducible
+Detecta dependencias probables a partir de la consigna del proyecto y arma un entorno Python reproducible: entorno virtual (`.venv`), `requirements.in` sin pin, lockfile `requirements.txt` congelado con versiones exactas, verificación mínima de imports y resumen en `reports/setup_env_report.md`. Prioriza que todos instalen desde el mismo lockfile. Incluye script opcional para inferir dependencias desde consigna (`.docx`, texto o markdown) cuando todavía no existe `requirements.in`.
+
+**Invocar con**: preparar entorno, bootstrap de proyecto, setup de notebook, `requirements.txt`, `venv`, consigna de TP.
+
+---
 
 ### `ds-planner` — Agente Planificador
 Toma un objetivo ambiguo y lo parte en fases pequeñas y verificables con criterios de aceptación binarios.
@@ -43,8 +51,15 @@ Toda hipótesis requiere: enunciado, test estadístico, resultado numérico, int
 
 ---
 
+### `ds-stats` — Estadística (marco y rigor inferencial)
+Orienta y explica estadística descriptiva e inferencial: elección e interpretación de tests, intervalos de confianza, α y p-valor, muestreo y tamaño de muestra, diseño y lectura de A/B, supuestos de modelos clásicos (normalidad, heterocedasticidad, linealidad, multicolinealidad) y trampas habituales (correlación vs causalidad, penetración vs distribución). **No sustituye** al Explorer (EDA) ni al Feature (transformaciones): no genera el notebook de exploración ni el pipeline de features; el código de producción sigue en esas skills. Es transversal: suele usarse después del Explorer y en iteración con el modelado cuando hace falta profundizar inferencia.
+
+**Invocar con**: `/ds-stats`, "qué test uso", "interpretar IC", estadística, muestreo, A/B, p-valor, supuestos del modelo.
+
+---
+
 ### `ds-feature` — Agente de Feature Engineering
-Toma los hallazgos del Explorer y produce features transformadas, validadas y sin leakage, listas para entrenar. **No hace feature selection** — eso le corresponde al Modeler.
+Toma los hallazgos del Explorer y produce features transformadas, validadas y sin leakage, listas para entrenar. **No hace feature selection** , eso le corresponde al Modeler.
 
 **Regla dura**: split PRIMERO, transformar DESPUÉS. Siempre. Todo encoder y scaler se fitea solo sobre train.
 **Outputs**: `data/processed/features_train.parquet`, `data/processed/features_test.parquet`, `src/features/pipeline.py`, `reports/feature_report.md`
@@ -82,7 +97,7 @@ QA crítico independiente — encuentra errores, bugs metodológicos y agujeros 
 ---
 
 ### `ds-report` — Agente Escritor
-Traduce hallazgos técnicos en un documento ejecutivo accionable para decisores no técnicos. **No hace análisis** — traduce análisis ya hechos.
+Traduce hallazgos técnicos en un documento ejecutivo accionable para decisores no técnicos. **No hace análisis** , traduce análisis ya hechos.
 
 **Inputs prohibidos**: `src/`, notebooks crudos, `data/`
 **Estructura fija** (siempre en este orden): TL;DR → Problema de negocio → Qué encontramos → Cómo funciona el modelo → Recomendación accionable → Limitaciones → Próximos pasos
@@ -106,8 +121,10 @@ git clone https://github.com/agus-chaud/data-science-kit.git
 
 **macOS / Linux:**
 ```bash
+cp -r data-science-kit/skills/ds-env-bootstrap ~/.claude/skills/
 cp -r data-science-kit/skills/ds-planner ~/.claude/skills/
 cp -r data-science-kit/skills/ds-explorer ~/.claude/skills/
+cp -r data-science-kit/skills/ds-stats ~/.claude/skills/
 cp -r data-science-kit/skills/ds-feature ~/.claude/skills/
 cp -r data-science-kit/skills/ds-model ~/.claude/skills/
 cp -r data-science-kit/skills/ds-reviewer ~/.claude/skills/
@@ -116,7 +133,7 @@ cp -r data-science-kit/skills/ds-report ~/.claude/skills/
 
 **Windows (PowerShell):**
 ```powershell
-$skills = @("ds-planner","ds-explorer","ds-feature","ds-model","ds-reviewer","ds-report")
+$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report")
 foreach ($s in $skills) {
     Copy-Item -Recurse "data-science-kit\skills\$s" "$env:USERPROFILE\.claude\skills\"
 }
