@@ -268,6 +268,37 @@ Archivo: `reports/review_{YYYY-MM-DD}.md`
 | No documentar hallazgos positivos | Revisión unilateral que no refuerza buenas prácticas | Mínimo 3 positivos obligatorios |
 | Revisar sin leer el plan original | Sin contrato de referencia, no se puede juzgar | Siempre leer plans/ primero |
 
+## Decision Logging (personalizado)
+
+Objetivo: dejar trazabilidad de criterios de auditoría sin convertir la revisión en burocracia.
+
+### Candidate Gate (Reviewer)
+
+Registrar como candidata solo si hubo:
+- Decisión de severidad discutible (p. ej., ALTO vs BLOQUEANTE) con justificación
+- Priorización explícita de riesgos en el plan de revisión
+- Cambio de veredicto global por evidencia nueva
+- Excepción metodológica aceptada temporalmente (con riesgo residual declarado)
+
+### Comportamiento durante la tarea
+
+- No interrumpir durante la auditoría.
+- Acumular candidatas junto con evidencia reproducible (ubicación y criterio de severidad).
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones de auditoría candidatas para `decisions.md` (severidad/priorización/veredicto/excepciones). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Reviewer)
+
+1. **Contexto**: entregable auditado y riesgo evaluado.
+2. **Decisión tomada**: criterio de severidad o veredicto aplicado.
+3. **Alternativas consideradas**: calificación/criterio alternativo evaluado.
+4. **Consecuencias**: impacto en continuidad del flujo y deuda de calidad pendiente.
+
 ## Integración con Gentleman Mode
 
 Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.

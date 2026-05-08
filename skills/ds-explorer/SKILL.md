@@ -236,6 +236,37 @@ Archivo: `reports/handoff_to_modeler.md`
 | Gráficos sin títulos ni ejes | Incomprensibles sin contexto | Estándar de gráficos aplicado a todos |
 | Declarar "no hay señal" sin probar encodings | Conclusión prematura | Mínimo 2 encodings antes de descartar |
 
+## Decision Logging (personalizado)
+
+Objetivo: capturar decisiones metodológicas de EDA sin frenar la exploración.
+
+### Candidate Gate (Explorer)
+
+Registrar como candidata solo si hubo:
+- Priorización o descarte de hipótesis por evidencia
+- Elección de test estadístico entre alternativas (por supuestos o tipo de variable)
+- Decisión de marcar una variable como leakage (o de no marcarla y por qué)
+- Cambio del orden de análisis por riesgo detectado en calidad de datos
+
+### Comportamiento durante la tarea
+
+- No interrumpir durante Fase 0-5.
+- Acumular candidatas internamente con evidencia mínima (métrica, test o hallazgo de calidad).
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones de EDA candidatas para `decisions.md` (hipótesis/tests/leakage). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Explorer)
+
+1. **Contexto**: hipótesis/variable/problema de calidad involucrado.
+2. **Decisión tomada**: test, prioridad o criterio de leakage adoptado.
+3. **Alternativas consideradas**: tests o caminos alternativos descartados.
+4. **Consecuencias**: impacto en handoff al Modeler y próximos análisis.
+
 ## Integración con Gentleman Mode
 
 Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.

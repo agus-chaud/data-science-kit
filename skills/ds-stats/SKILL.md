@@ -103,6 +103,37 @@ Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
 - Insistir en **qué se puede concluir** con los datos y el diseño real (¿aleatoriedad? ¿confusores?).
 - Separar **significación estadística** de **tamaño de efecto** y utilidad de negocio.
 
+## Decision Logging (personalizado)
+
+Objetivo: documentar decisiones inferenciales críticas para evitar interpretaciones inconsistentes.
+
+### Candidate Gate (Stats)
+
+Registrar como candidata solo si hubo:
+- Elección de test inferencial entre alternativas válidas
+- Decisión de una vs dos colas (y criterio adoptado)
+- Definición de α, nivel de confianza o umbral de decisión no estándar
+- Aceptación/rechazo de supuestos (normalidad, homocedasticidad, independencia) con impacto en el análisis
+
+### Comportamiento durante la tarea
+
+- No interrumpir durante la explicación o soporte estadístico.
+- Acumular candidatas con evidencia mínima: hipótesis, test, supuesto y criterio de decisión.
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones estadísticas candidatas para `decisions.md` (test/colas/alpha/supuestos). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Stats)
+
+1. **Contexto**: pregunta inferencial y tipo de variable/diseño.
+2. **Decisión tomada**: test, cola, alpha o criterio adoptado.
+3. **Alternativas consideradas**: tests o criterios alternativos evaluados.
+4. **Consecuencias**: impacto en interpretación, robustez y decisiones de negocio.
+
 ## Regla transversal de hipótesis (obligatoria)
 
 - Cualquier skill del ecosistema que necesite plantear o validar hipótesis debe apoyarse en `ds-stats` como referencia metodológica principal.

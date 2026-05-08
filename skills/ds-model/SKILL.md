@@ -283,6 +283,37 @@ Archivo: `reports/modeling_results.md`
 | Tunear cuando mejora < 2% | Tiempo perdido | Volver a feature engineering |
 | Reportar solo CV sin test final | Optimismo sesgado | Test final obligatorio, una vez |
 
+## Decision Logging (personalizado)
+
+Objetivo: preservar decisiones de modelado que cambian resultados o interpretación.
+
+### Candidate Gate (Model)
+
+Registrar como candidata solo si hubo:
+- Definición o cambio de métrica principal por costo de negocio/desbalance
+- Elección del modelo ganador frente a alternativas cercanas
+- Decisión de tuning (hacer/no hacer) por umbral de mejora
+- Decisión relevante de feature selection (criterio y cantidad final)
+
+### Comportamiento durante la tarea
+
+- No interrumpir mientras se ejecutan entrenamientos o comparaciones.
+- Acumular candidatas con evidencia cuantitativa (CV mean/std, gap train-test, mejora porcentual).
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones de modelado candidatas para `decisions.md` (métrica/ganador/tuning/selection). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Model)
+
+1. **Contexto**: problema, métrica objetivo y restricciones de evaluación.
+2. **Decisión tomada**: modelo/métrica/estrategia seleccionada.
+3. **Alternativas consideradas**: modelos o configuraciones descartadas.
+4. **Consecuencias**: impacto en robustez, performance y riesgo de overfitting.
+
 ## Integración con Gentleman Mode
 
 Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.

@@ -272,6 +272,37 @@ Como todo modelo predictivo, este tiene limitaciones que deben tenerse en cuenta
 | Gráficos sin caption descriptivo | Incomprensibles sin contexto | Caption que explica la conclusión, no el tipo de gráfico |
 | No pasar por Reviewer | Errores llegan a decisores | ds-reviewer antes de declarar listo |
 
+## Decision Logging (personalizado)
+
+Objetivo: capturar decisiones de comunicación ejecutiva que impactan adopción y acción.
+
+### Candidate Gate (Report)
+
+Registrar como candidata solo si hubo:
+- Elección de ángulo narrativo (costos, riesgo, oportunidad, fairness)
+- Priorización de hallazgos (qué entra y qué se excluye)
+- Traducción no obvia de una métrica técnica a lenguaje de negocio
+- Decisión de recomendación accionable con responsable/plazo por impacto
+
+### Comportamiento durante la tarea
+
+- No interrumpir durante redacción.
+- Acumular candidatas con vínculo explícito entre decisión narrativa y objetivo de audiencia.
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones de comunicación ejecutiva candidatas para `decisions.md` (narrativa/priorización/traducciones/recomendaciones). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Report)
+
+1. **Contexto**: audiencia y objetivo de negocio del reporte.
+2. **Decisión tomada**: framing narrativo o criterio de priorización aplicado.
+3. **Alternativas consideradas**: enfoques narrativos o mensajes descartados.
+4. **Consecuencias**: impacto esperado en comprensión, alineación y ejecución.
+
 ## Integración con Gentleman Mode
 
 Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.

@@ -317,6 +317,37 @@ Actualizar `reports/handoff_to_modeler.md` agregando sección:
 | TargetEncoder fiteado en todo el dataset | Leakage del target | Fitear solo con y_train |
 | Ignorar columnas con nulls > 20% sin flag | Perder señal implícita en el null | Crear `{col}_was_null` antes de imputar |
 
+## Decision Logging (personalizado)
+
+Objetivo: registrar decisiones de transformación que afectan validez y mantenibilidad.
+
+### Candidate Gate (Feature)
+
+Registrar como candidata solo si hubo:
+- Elección no trivial de imputación/encoding/escalado (con trade-off explícito)
+- Decisión de dropear columnas por leakage, redundancia o baja utilidad
+- Creación de features derivadas con hipótesis de valor predictivo
+- Resolución de conflicto entre simplicidad del pipeline y performance esperada
+
+### Comportamiento durante la tarea
+
+- No interrumpir durante la construcción del pipeline.
+- Guardar internamente candidatas con: variable, decisión, alternativa y riesgo evitado.
+
+### Cierre de tarea (una sola pregunta)
+
+Si hay candidatas:
+"Detecté {N} decisiones de feature engineering candidatas para `decisions.md` (imputación/encoding/drop/derivadas). ¿Querés que las documente ahora?"
+
+Si no hay candidatas: no preguntar.
+
+### Plantilla sugerida para `decisions.md` (Feature)
+
+1. **Contexto**: variable(s), problema detectado y restricción del pipeline.
+2. **Decisión tomada**: transformación elegida y criterio técnico.
+3. **Alternativas consideradas**: opciones descartadas y por qué.
+4. **Consecuencias**: impacto en leakage, reproducibilidad y handoff al Modeler.
+
 ## Integración con Gentleman Mode
 
 Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
