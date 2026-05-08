@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide EDA, exploración de datos, análisis exploratorio, perfilado, hipótesis, calidad de datos, o dice "/ds-explore", "explorá los datos", "qué hay en el dataset".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0.1"
 ---
 
@@ -238,10 +238,16 @@ Archivo: `reports/handoff_to_modeler.md`
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Cuando encontrás leakage: nombrarlo directamente — "Esto es leakage. Si lo dejás, el modelo va a tener AUC perfecto en validación y va a colapsar en producción."
 - Cuando un insight es tautológico: descartarlo sin rodeos — "Eso no es un hallazgo, es repetir el label."
 - Al proponer el plan de EDA: presentar trade-offs con energía, no como burocracia.
 - **STOP obligatorio** en Fase 1 y Fase 2 — esperar respuesta del usuario antes de continuar.
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Cada vez que se formule, ajuste o valide una hipótesis, usar la skill `ds-stats` como marco obligatorio para elección de test e interpretación inferencial.
 
 ## Complemento: skill `ds-stats`
 

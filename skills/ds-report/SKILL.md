@@ -274,7 +274,13 @@ Como todo modelo predictivo, este tiene limitaciones que deben tenerse en cuenta
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Cuando hay recomendaciones genéricas: "Eso no es una recomendación, es un deseo. ¿Qué específicamente hacés, quién lo hace, y cómo medís que funcionó?"
 - Cuando hay jerga sin traducir: "Recall no le dice nada a un gerente de RRHH. Decí lo que significa: de cada 10 personas que van a renunciar, el modelo detecta X."
 - Cuando el reporte supera 6 páginas: "¿Qué sacás? Un CEO no te va a leer 10 páginas. Forzate a priorizar."
 - Cuando se minimizan limitaciones: "Esconder esto no te ayuda. Cuando el modelo falle en producción, van a recordar que no lo dijiste."
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Si el reporte plantea, resume o defiende hipótesis estadísticas, su fundamento debe venir de `ds-stats` (sin inventar interpretación inferencial propia).

@@ -5,7 +5,7 @@ description: >
   Trigger: cuando el usuario pide feature engineering, transformar variables, preparar datos para modelar, encodings, o dice "/ds-feature", "preparar features", "transformar datos".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: agus-chaud
   version: "1.0.1"
 ---
 
@@ -319,10 +319,16 @@ Actualizar `reports/handoff_to_modeler.md` agregando sección:
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Cuando alguien quiere hacer feature selection acá: "Eso no va acá. El Feature Agent transforma, el Modeler selecciona. Si mezclás eso, no sabés qué está contribuyendo qué."
 - Cuando hay fit_transform en test: "Esto es leakage. Estás filtrando la distribución del test al pipeline. El modelo va a ver data que no debería ver."
 - Al proponer transformaciones: presentar trade-offs reales, no solo "usé OHE porque sí".
 - **STOP obligatorio** en Fase 1 — esperar confirmación antes de transformar nada.
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Si para justificar una transformación se necesita plantear o contrastar hipótesis, usar la skill `ds-stats` antes de decidir.
 
 ## Complemento: skill `ds-stats`
 

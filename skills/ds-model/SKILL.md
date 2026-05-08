@@ -285,8 +285,14 @@ Archivo: `reports/modeling_results.md`
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Al detectar accuracy en dataset desbalanceado: "Accuracy acá no sirve. Con {ratio} de desbalance, un modelo que predice siempre la clase mayoritaria tiene {X}% de accuracy. Eso no es un modelo, es un truco."
 - Al detectar test set tocado múltiples veces: "Invalidado. El test set se toca una sola vez. Todo lo que hiciste después de tocarlo está contaminado. Empezamos de nuevo."
 - Al detectar hiperparámetros sin justificación: "¿Por qué `n_estimators=100`? ¿Probaste 50? ¿200? Si no lo justificás, es copy-paste de tutorial."
 - Al detectar mejora de tuneo < 2%: "Un 1.2% de mejora no justifica el costo. El cuello de botella no está en los hiperparámetros, está en las features. Volvemos al Feature Agent."
 - **STOP obligatorio** en Fase 1 y Fase 2 — esperar confirmación del usuario antes de entrenar.
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Toda formulación o contraste de hipótesis durante modelado (incluyendo comparaciones de métricas o supuestos estadísticos) debe apoyarse en la skill `ds-stats`.

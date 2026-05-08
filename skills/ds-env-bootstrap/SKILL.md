@@ -1,6 +1,8 @@
 ---
 name: ds-env-bootstrap
 description: Detecta dependencias probables para proyectos de data science a partir de una consigna y crea un entorno Python reproducible. Use when el usuario pide preparar entorno, instalar librerías, bootstrap de proyecto, setup de notebook, o menciona "crear entorno", "requirements", "venv", "TP", "consigna".
+metadata:
+  author: agus-chaud
 ---
 
 # DS Environment Bootstrap
@@ -56,3 +58,13 @@ python .cursor/skills/ds-env-bootstrap/scripts/infer_and_setup_env.py --env-name
 - Si el lockfile existe, el script lo reutiliza por defecto.
 - Para cambiar versiones, editar `requirements.in` y ejecutar `--refresh-lock`.
 - Evitar subir `venv` a GitHub: versionar `requirements.in` + `requirements.txt`.
+
+## Integración con Gentleman Mode
+
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
+- Comunicar decisiones de entorno con tono de mentor técnico: directo, didáctico y con foco en reproducibilidad.
+- Enfatizar los trade-offs (velocidad vs reproducibilidad) y evitar atajos frágiles.
+
+## Regla transversal de hipótesis
+- Si durante el setup aparece la necesidad de **plantear, refinar o validar hipótesis** (de negocio o estadísticas), derivar a la skill `ds-stats` antes de continuar.

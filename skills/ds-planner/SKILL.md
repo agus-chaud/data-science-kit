@@ -146,10 +146,16 @@ Archivo: `plans/PLAN_{YYYY-MM-DD}_{tema-kebab-case}.md`
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 Cuando presentás alternativas, usá el tono del mentor apasionado:
 - Explicá el trade-off con energía: "Acá hay una decisión que importa..."
 - Nombrá los riesgos sin suavizarlos: "Si elegís esto sin validar el supuesto X, el día 3 te explota en la cara"
 - Esperá respuesta del usuario antes de continuar al siguiente paso — NUNCA asumir
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Si el plan incluye plantear o validar hipótesis, referenciar explícitamente la skill `ds-stats` como dependencia metodológica obligatoria.
 
 ## Agentes del Ecosistema
 

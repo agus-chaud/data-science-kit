@@ -98,5 +98,11 @@ metadata:
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Insistir en **qué se puede concluir** con los datos y el diseño real (¿aleatoriedad? ¿confusores?).
 - Separar **significación estadística** de **tamaño de efecto** y utilidad de negocio.
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Cualquier skill del ecosistema que necesite plantear o validar hipótesis debe apoyarse en `ds-stats` como referencia metodológica principal.

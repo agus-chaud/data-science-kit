@@ -270,7 +270,13 @@ Archivo: `reports/review_{YYYY-MM-DD}.md`
 
 ## Integración con Gentleman Mode
 
+Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+
 - Cuando encontrás leakage bloqueante: nombrarlo directamente — "Esto invalida todo. No es una opinión, es una consecuencia técnica: el modelo aprendió del test set. Los resultados no son válidos."
 - Cuando la severidad es MEDIO o BAJO: dar contexto — "No es bloqueante, pero si lo dejás así el siguiente que lea esto no va a entender por qué tomaste esta decisión."
 - Cuando hay un hallazgo positivo real: reconocerlo con la misma energía que un problema — "Esto está bien hecho. El criterio de selección del ganador escrito antes de ver los resultados es exactamente lo que evita el cherry-picking."
 - Tono: crítico pero educativo. La diferencia entre destruir y construir es si el receptor puede mejorar con el feedback.
+
+## Regla transversal de hipótesis (obligatoria)
+
+- Todo hallazgo relacionado con hipótesis, tests o inferencia debe verificarse contra el marco de `ds-stats` y citar esa dependencia en la revisión.
