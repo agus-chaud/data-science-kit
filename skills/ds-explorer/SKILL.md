@@ -6,15 +6,19 @@ description: >
 license: Apache-2.0
 metadata:
   author: agus-chaud
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 ## When to Use
 
-- Usuario pide exploración, perfilado, o análisis de calidad de datos
+- Usuario pide exploración o perfilado
 - Se invoca `/ds-explore` o variantes ("explorá los datos", "qué hay en el dataset", "analizá el CSV")
 - Existe un plan en `plans/` que especifica qué explorar
 - Se necesita validar hipótesis de negocio antes de modelar
+
+## Complemento: `ds-dq`
+
+Si el foco es  calidad de datos con pandas (diagnóstico estructural + corrección según el playbook del repo en `calidad-de-datos.md`), sin el flujo completo de hipótesis/EDA ML de esta skill, usar **`ds-dq`**. El Explorer puede **consumir** sus `reports/data_quality.md` / log de limpieza como insumo.
 
 ## Inputs Permitidos
 
@@ -269,12 +273,24 @@ Si no hay candidatas: no preguntar.
 
 ## Integración con Gentleman Mode
 
-Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+**Propósito:** Gentleman mode es la capa de **tono y pedagogía** cuando el usuario lo activa (p. ej. `modo gentleman`, `/gentleman`, o el toggle que tengan cargado en el entorno). **No cambia** las reglas técnicas de esta skill — leakage, checkpoints, formato de hipótesis, handoff — solo **cómo** se comunican. Para voseo, energía y límites de estilo leer **`skills/gentleman/SKILL.md`**.
 
-- Cuando encontrás leakage: nombrarlo directamente — "Esto es leakage. Si lo dejás, el modelo va a tener AUC perfecto en validación y va a colapsar en producción."
-- Cuando un insight es tautológico: descartarlo sin rodeos — "Eso no es un hallazgo, es repetir el label."
-- Al proponer el plan de EDA: presentar trade-offs con energía, no como burocracia.
-- **STOP obligatorio** en Fase 1 y Fase 2 — esperar respuesta del usuario antes de continuar.
+| Contexto | Comportamiento |
+|----------|----------------|
+| Gentleman **ON** (usuario en español) | Seguir Gentleman — Rioplatense, energía genuina, preguntas retóricas donde sumen cuidado, no sarcasmo. |
+| Gentleman **OFF** | Mismo rigor técnico; tono profesional-neutral. |
+
+**Help first:** devolvé primero el **hecho técnico útil** (qué ves, qué conviene hacer). El “tough love” viene **después** y cuando importa — leakage, tautologías que se venden como insight, saltarse leakage — porque es **cuidado**, no interrogatorio por defecto *(alinea con Gentleman: helpful first)*.
+
+**Dónde Gentleman marca el ritmo dentro del Explorer**
+
+- **Leakage:** nombrarlo directo — *"Esto es leakage. Si lo dejás, el modelo va a tener AUC perfecto en validación y va a colapsar en producción."*
+- **Insight tautológico:** descartarlo con claridad — *"Eso no es un hallazgo, es repetir el label."*
+- **Plan de EDA (Fases 1–2):** trade-offs con convicción, no checklist fría; igual **STOP obligatorio** — no seguir hasta respuesta del usuario *(coherente con Gentleman: al preguntar, parar después de la pregunta).*
+
+**No confundir**
+
+- Gentleman aquí define **voz**, no sustituye **`ds-stats`** (marco inferencial) ni **`ds-dq`** (diagnóstico/corrección pandas tipo `calidad-de-datos.md`). Esas skills llevan las reglas de su dominio.
 
 ## Regla transversal de hipótesis (obligatoria)
 

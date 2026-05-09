@@ -15,8 +15,10 @@ Estas skills resuelven eso dándole a cada fase un **contrato estricto**: qué l
 ## El ecosistema
 
 ```
-ds-env-bootstrap --> ds-planner --> ds-explorer --> ds-feature --> ds-model --> ds-reviewer --> ds-report
+ds-env-bootstrap --> ds-planner --> ds-dq (opc.) / ds-explorer --> ds-feature --> ds-model --> ds-reviewer --> ds-report
 ```
+
+(`ds-dq` audita y corrige calidad con pandas según `calidad-de-datos.md`; puede ir antes o en paralelo al Explorer según el proyecto.)
 
 ---
 
@@ -51,11 +53,24 @@ Toda hipótesis requiere: enunciado, test estadístico, resultado numérico, int
 
 ---
 
+### `ds-dq` — Calidad de datos (pandas: diagnóstico y corrección)
+
+Perfilado estructural, inventario de nulos/duplicados/tipos/cardinalidad, correlaciones **descriptivas**, y **corrección reproducible** (`astype`, `to_numeric`/`to_datetime`, `drop`/`dropna`/`fillna`, `drop_duplicates`, `rename`, `replace`/`map`, accessor `.str`). Contenido alineado con **`calidad-de-datos.md`** del kit (Pandas IV/V, caso Madrid, prácticas 13–15).
+
+**No hace:** hipótesis de negocio con test+p-valor ni EDA ML completo (eso es `ds-explorer`); inferencia profunda (`ds-stats`); pipelines de features (`ds-feature`).
+
+**Outputs típicos:** `reports/data_quality.md`, `reports/data_cleaning_log.md`, opcional `notebooks/00_calidad_datos.ipynb`.
+
+**Invocar con**: `/ds-dq`, "calidad de datos", "limpiar el Excel", "diagnóstico de nulos y duplicados", "auditar calidad del dataset".
+
+---
+
 ### `ds-stats` — Estadística (marco y rigor inferencial)
 Orienta y explica estadística descriptiva e inferencial: elección e interpretación de tests, intervalos de confianza, α y p-valor, muestreo y tamaño de muestra, diseño y lectura de A/B, supuestos de modelos clásicos (normalidad, heterocedasticidad, linealidad, multicolinealidad) y trampas habituales (correlación vs causalidad, penetración vs distribución).  
 
 **Límites operativos**:  
 - No sustituye al `ds-explorer`: no arma `notebooks/01_eda.ipynb` ni el reporte EDA.  
+- No sustituye al `ds-dq`: no es el playbook de limpieza/diagnóstico pandas del `calidad-de-datos.md`.  
 - No sustituye al `ds-feature`: no implementa pipelines de transformaciones productivas.  
 - No compite con `ds-model` en selección de variables o evaluación de modelos.  
 
@@ -138,6 +153,7 @@ git clone https://github.com/agus-chaud/data-science-kit.git
 cp -r data-science-kit/skills/ds-env-bootstrap ~/.claude/skills/
 cp -r data-science-kit/skills/ds-planner ~/.claude/skills/
 cp -r data-science-kit/skills/ds-explorer ~/.claude/skills/
+cp -r data-science-kit/skills/ds-dq ~/.claude/skills/
 cp -r data-science-kit/skills/ds-stats ~/.claude/skills/
 cp -r data-science-kit/skills/ds-feature ~/.claude/skills/
 cp -r data-science-kit/skills/ds-model ~/.claude/skills/
@@ -147,7 +163,7 @@ cp -r data-science-kit/skills/ds-report ~/.claude/skills/
 
 **Windows (PowerShell):**
 ```powershell
-$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report")
+$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report")
 foreach ($s in $skills) {
     Copy-Item -Recurse "data-science-kit\skills\$s" "$env:USERPROFILE\.claude\skills\"
 }

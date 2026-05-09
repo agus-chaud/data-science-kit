@@ -24,6 +24,7 @@ metadata:
 | Skill | Rol | ds-stats NO hace |
 |-------|-----|------------------|
 | **ds-explorer** | EDA, calidad, hipótesis de negocio con tests concretos y reportes (`eda.md`, `hipotesis.md`) | Sustituir el flujo EDA ni generar el notebook de exploración |
+| **ds-dq** | Diagnóstico/corrección pandas (`calidad-de-datos.md`), nulos duplicados tipos `.str` | Sustituir marco inferencial ni diseño experimental |
 | **ds-feature** | Pipeline de transformaciones train/test, parquet, `pipeline.py` | Implementar escalers/imputers salvo que el usuario pida código explícito de ejemplo |
 | **ds-model** | Entrenar, CV, feature selection | Competir con el Modeler en selección de variables o métricas de modelo |
 
