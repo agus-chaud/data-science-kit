@@ -52,7 +52,21 @@ Toda hipótesis requiere: enunciado, test estadístico, resultado numérico, int
 ---
 
 ### `ds-stats` — Estadística (marco y rigor inferencial)
-Orienta y explica estadística descriptiva e inferencial: elección e interpretación de tests, intervalos de confianza, α y p-valor, muestreo y tamaño de muestra, diseño y lectura de A/B, supuestos de modelos clásicos (normalidad, heterocedasticidad, linealidad, multicolinealidad) y trampas habituales (correlación vs causalidad, penetración vs distribución). **No sustituye** al Explorer (EDA) ni al Feature (transformaciones): no genera el notebook de exploración ni el pipeline de features; el código de producción sigue en esas skills. Es transversal: suele usarse después del Explorer y en iteración con el modelado cuando hace falta profundizar inferencia.
+Orienta y explica estadística descriptiva e inferencial: elección e interpretación de tests, intervalos de confianza, α y p-valor, muestreo y tamaño de muestra, diseño y lectura de A/B, supuestos de modelos clásicos (normalidad, heterocedasticidad, linealidad, multicolinealidad) y trampas habituales (correlación vs causalidad, penetración vs distribución).  
+
+**Límites operativos**:  
+- No sustituye al `ds-explorer`: no arma `notebooks/01_eda.ipynb` ni el reporte EDA.  
+- No sustituye al `ds-feature`: no implementa pipelines de transformaciones productivas.  
+- No compite con `ds-model` en selección de variables o evaluación de modelos.  
+
+**Rol transversal**: suele entrar después del EDA y durante iteraciones de modelado cuando hay que defender una decisión inferencial.
+
+**Integración con Gentleman**:
+- Separa significación estadística de tamaño de efecto e impacto de negocio.
+- Explicita qué se puede concluir (y qué no) según el diseño real de los datos.
+
+**Decision logging (cuando aplica)**:
+- Si durante la tarea hubo decisiones inferenciales críticas (elección de test, una vs dos colas, α no estándar, supuestos aceptados/rechazados), `ds-stats` las puede registrar en `decisions.md` al cierre.
 
 **Invocar con**: `/ds-stats`, "qué test uso", "interpretar IC", estadística, muestreo, A/B, p-valor, supuestos del modelo.
 

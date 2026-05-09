@@ -1,20 +1,32 @@
 ---
 name: ds-feature
 description: >
-  Feature Engineering Agent para data science: toma los hallazgos del Explorer y produce features transformadas, validadas y sin leakage, listas para entrenar. NO hace feature selection — eso es responsabilidad del Modeler.
-  Trigger: cuando el usuario pide feature engineering, transformar variables, preparar datos para modelar, encodings, o dice "/ds-feature", "preparar features", "transformar datos".
+  Feature Engineering para data science: modo ML (pipeline train/test, sin leakage, handoff al Modeler) y modo BA (variables de negocio con trazabilidad de las 11 técnicas IAAN, validaciones semánticas, temporalidad). NO hace feature selection en modo ML.
+  Trigger: "/ds-feature", "preparar features", "variables de negocio", "enriquecer dataset", feature engineering, encodings, modo BA.
 license: Apache-2.0
 metadata:
   author: agus-chaud
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
+## Cómo se explica esta skill (auto-descripción)
+
+Esta skill es el **puente entre datos crudos y datos listos para decidir**: o bien para **modelar** (tabla X/y con pipeline reproducible), o bien para **explicar el negocio** (variables derivadas con sentido, nombreable y defendible ante un comité). No mezcla responsabilidades con el Explorer (quien perfila y entrega handoff), ni con el Modeler (quien entrena y hace **feature selection**). Si el usuario pide "solo features para Power BI / cuadro de mando", activá **modo BA**. Si pide "dataset para entrenar", activá **modo ML**. En ambos casos: **split primero en ML**, **orden temporal explícito en series y cohortes**, y **cada variable nueva lleva técnica y justificación**.
+
 ## When to Use
+
+**Modo ML (por defecto si el objetivo es entrenar)**
 
 - Existe `reports/handoff_to_modeler.md` generado por el Explorer
 - Usuario pide transformar variables, preparar datos para modelar, o aplicar encodings
 - Se invoca `/ds-feature` o variantes ("preparar features", "transformar datos", "feature engineering")
 - Hay un plan en `plans/` que especifica qué features construir
+
+**Modo BA — Business Analytics / variables de negocio**
+
+- Objetivo es **medir, segmentar, rankear o explicar** con variables derivadas (no necesariamente tabular para sklearn)
+- Triggers: "variables de negocio", "crear KPI derivados", "segmentos", "Pareto", "cohorte", "ranking", "modo BA", "/ds-feature ba"
+- Pedido explícito de trazabilidad pedagógica (saber **qué técnica** aplicó a cada columna nueva)
 
 ## Inputs Permitidos
 
@@ -26,6 +38,90 @@ metadata:
 | `plans/` | Qué features construir y por qué |
 | Engram | Decisiones de transformación previas, features descartadas |
 
+## Modo operativo: ML pipeline vs BA (variables de negocio)
+
+| Aspecto | Modo ML | Modo BA |
+|---------|---------|---------|
+| Objetivo | `X_train` / `X_test` y `y` listos para el Modeler | Dataset enriquecido para análisis, reporting, decisión operativa |
+| Split train/test | **Obligatorio antes de cualquier fit** | No siempre; si hay entidad temporal o cohorte, definí ventanas o holdout **con criterio explícito** |
+| Feature selection | No (Modeler) | Puede haber **priorización** de variables para el cuadro (no es subset para CV) |
+| Trazabilidad | `feature_report.md` + pipeline | Misma rigor **más** columna "técnica BA" por variable (véase catálogo) |
+| Validación | Leakage, shapes, reproducibilidad | + **semántica** (rangos, monotonía esperada, coherencia fechas/cohortes) |
+
+**Regla de oro**: en modo BA no abandonás buenas prácticas de datos: si después alguien quiere modelar con el mismo enriquecimiento, el report debe permitir replicar transformaciones sin magia.
+
+## Catálogo BA — 11 técnicas (IAAN) y cuándo usarlas
+
+Síntesis alineada al material *Creación de variables de negocio* (cheatsheet, notebooks 01–03). Cada variable **nueva** debe poder etiquetarse con al menos una de estas familias (en `reports/business_variables_report.md` o en el `feature_report.md` en tabla ampliada).
+
+| # | Técnica | Patrones pandas / numpy | Usala cuando… |
+|---|---------|-------------------------|----------------|
+| 1 | Cálculos directos y vectorizados | Operaciones entre columnas, `assign` | Derivás un ratio, margen, diferencia entre columnas existentes |
+| 2 | `apply` por fila o columna | `df.apply`, `series.map` | La lógica **no** se expresa en una sola expresión vectorizada simple (usar con moderación) |
+| 3 | `transform` vs `apply` con `groupby` | `groupby(...).transform` devuelve **misma longitud** que el índice | Necesitás una métrica **por fila** dentro de cada grupo (p. ej. % del total del grupo) |
+| 4 | `groupby().agg` vs `transform` | `agg` reduce a una fila por grupo; `transform` alinea | Querés **resumen** por grupo vs **feature a nivel fila** |
+| 5 | Discretización | `pd.cut`, `pd.qcut` | Segmentás en bandas; usá `-np.inf`/`np.inf` en `bins` si los extremos son abiertos |
+| 6 | Condicionales | `np.where`, `np.select` | Reglas de negocio explícitas por tramos |
+| 7 | Serie temporal / cohortes | `cumsum`, `cummax`, `cummin`, `cumprod`, `pct_change`, `shift` | Acumulados, variaciones, lags; **siempre** orden por tiempo y `groupby` por entidad si aplica |
+| 8 | Rankings | `rank(method='first', ascending=...)` | Posición relativa dentro de un universo o dentro de un grupo |
+| 9 | Dummies | `pd.get_dummies(..., drop_first=..., dtype=int)` | Modelado o tablas pivot; cuidado **multicolinealidad** si `drop_first` depende del contexto |
+| 10 | Pareto | ordenar → posición → % acumulado | Priorización de clientes, productos, causas (véase plantilla abajo) |
+| 11 | Preproceso de nombres y tipos | estandarizar columnas, `set_index` temporal, `to_numeric` | **Siempre** como paso previo cuando los datos vienen "de la calle" |
+
+**Matriz rápida "¿qué elijo?"**
+
+- ¿La pregunta es "¿cuánto aporta cada categoría al total?" → agregación + posible Pareto (#10).
+- ¿La pregunta es "¿cómo evoluciona cada unidad en el tiempo?" → temporal (#7) con orden y entidad.
+- ¿La pregunta es "¿a qué segmento pertenece esta fila?" → discretización (#5) o condicionales (#6).
+
+## Outputs por modo (separación ML vs BA)
+
+**Modo ML** (`reports/feature_report.md` + artefactos ya definidos abajo).
+
+**Modo BA** — además o en lugar del pipeline ML:
+
+| Archivo | Contenido |
+|---------|-----------|
+| `data/processed/dataset_ba_enriched.parquet` (o CSV acordado) | Mismo universo de filas que el análisis + **columnas nuevas** con nombres de negocio |
+| `reports/business_variables_report.md` | Por cada variable nueva: nombre, **técnica BA (#1–11)**, fórmula o código de referencia, supuestos, validaciones pasadas |
+| Gráfico opcional | Si hubo Pareto: referencia al archivo exportado (`reports/figures/pareto_*.png`) |
+
+Si un proyecto pide **ambos** modos, mantené **dos ramas de salida**: no mezcles `features_train.parquet` con columnas solo-BA sin documentarlo en ambos reportes.
+
+## Validaciones semánticas (modo BA y sanity checks en ML)
+
+Además de tipos y nulls:
+
+- **Rangos**: ¿la variable derivada respeta dominio de negocio? (p. ej. proporciones en [0,1], días ≥ 0).
+- **Monotonicidad esperada**: si el negocio asume "a más X, más Y", documentá si el dato la cumple o por qué no.
+- **Coherencia temporal**: fechas no decrecientes por entidad; sin mezclar periodos (ver siguiente sección).
+- **Cohortes**: mismas reglas de ventana (quién entra en la cohorte y en qué timestamp).
+
+## Reglas de temporalidad y cohortes
+
+1. **Orden**: ordená explícitamente por variable de tiempo antes de `shift`, `pct_change`, acumulados.
+2. **Entidad**: si hay cliente/usuario/producto, usá `groupby(entidad).transform(...)` o `shift` **por grupo**, no global salvo que el negocio lo pida.
+3. **No mezclar periodos**: si fusionás meses distintos, documentá la regla (¿suma? ¿promedio? ¿último valor?).
+4. **Leakage en ML**: si una feature temporal se usa en modelado, el split respeta el tiempo (**time-based split**), no mezclar futuro en train.
+
+## Plantilla Pareto (reutilizable)
+
+1. Ordenar descendente por la métrica de impacto (ventas, coste, frecuencia).
+2. Calcular suma total y **% sobre total** por fila.
+3. **% acumulado** sobre el universo ordenado.
+4. Marcar "top que explica el ~80%" (regla orientativa, no dogma).
+5. Export opcional: tabla + gráfico de barras + línea acumulada (matplotlib/seaborn); guardar ruta en el report BA.
+
+## Checklist previo: patrones de datos sucios (material IAAN)
+
+Antes de transformar, en **modo ML y BA**:
+
+- [ ] Nombres de columnas: acentos, espacios, mayúsculas inconsistentes → **normalizar**.
+- [ ] Números con formato local (guiones, separadores miles) → **`to_numeric` con `errors`** y trazabilidad de filas inválidas.
+- [ ] Fechas en string heterogéneas → **parse explícito** o `infer_datetime_format` con revisión de NaT.
+- [ ] Índice temporal opcional pero recomendado si hay serie: **`set_index`** o columna `fecha` tipada `datetime64`.
+- [ ] Duplicados lógicos (misma entidad + mismo timestamp) → política explícita (agregar, último, error).
+
 ## Inputs PROHIBIDOS (Hard Stop)
 
 - `src/models/` — no le concierne entrenar modelos
@@ -33,14 +129,14 @@ metadata:
 - **Regla**: si estás entrenando o evaluando un modelo, saliste del scope. STOP.
 - **Regla**: si estás haciendo feature selection (elegir qué features usar), eso es del Modeler. STOP.
 
-## Outputs Requeridos
+## Outputs Requeridos (modo ML)
 
 | Archivo | Contenido |
 |---------|-----------|
 | `data/processed/features_train.parquet` | Features transformadas — solo filas de train |
 | `data/processed/features_test.parquet` | Features transformadas — solo filas de test |
 | `src/features/pipeline.py` | Pipeline reproducible sklearn/pandas |
-| `reports/feature_report.md` | Justificación de cada transformación |
+| `reports/feature_report.md` | Justificación de cada transformación (si hay variables BA, añadí columna **Técnica BA**) |
 | `reports/handoff_to_modeler.md` | Actualizado con feature list final + notas para el Modeler |
 
 ## Outputs PROHIBIDOS
@@ -53,12 +149,16 @@ metadata:
 
 ### Fase 0 — Explore: "¿Qué me deja el Explorer?"
 
-1. Leer `reports/handoff_to_modeler.md` — columnas a dropear, encodings sugeridos, warnings
-2. Leer `reports/data_quality.md` — problemas pendientes de resolver
-3. Buscar en engram (`mem_context` + `mem_search`) — ¿hubo decisiones de features previas?
-4. Cargar `data/raw/` y aplicar el split train/test ANTES de cualquier transformación
+1. **Elegir modo**: ML (modelar), BA (variables de negocio), o **híbrido** (documentar las dos salidas).
+2. **Checklist datos sucios** (patrones IAAN): nombres, numéricos con basura, fechas, duplicados (sección checklist arriba).
+3. Leer `reports/handoff_to_modeler.md` — columnas a dropear, encodings sugeridos, warnings
+4. Leer `reports/data_quality.md` — problemas pendientes de resolver
+5. Buscar en engram (`mem_context` + `mem_search`) — ¿hubo decisiones de features previas?
+6. Cargar `data/raw/` y, **si modo ML**, aplicar el split train/test ANTES de cualquier transformación que aprenda de datos
 
-**Regla crítica del split**: el split se hace PRIMERO. Toda transformación se fitea sobre train y se aplica a test. Sin excepciones.
+**Regla crítica del split (modo ML)**: el split se hace PRIMERO. Toda transformación se fitea sobre train y se aplica a test. Sin excepciones.
+
+En **modo BA** sin modelado inmediato: el split puede no aplicarse, pero **orden temporal** y **ventanas** deben quedar definidos en el report para que un modelo futuro no herede ambigüedad.
 
 ### Fase 1 — Propose: Plan de Transformaciones
 
@@ -194,6 +294,8 @@ Guardar:
 
 Antes de emitir handoff, verificar:
 
+**Modo ML**
+
 - [ ] ¿El split se hizo ANTES de cualquier transformación?
 - [ ] ¿Todos los fiteos (imputers, encoders, scalers) usan solo train?
 - [ ] ¿Se aplicó transform (no fit_transform) al test set?
@@ -204,6 +306,13 @@ Antes de emitir handoff, verificar:
 - [ ] ¿Las features derivadas tienen hipótesis respaldada por el EDA?
 - [ ] ¿Se hizo feature selection? → STOP, eso es del Modeler
 - [ ] ¿El pipeline es reproducible? (random_state fijo, sin side effects)
+
+**Modo BA (añadidos)**
+
+- [ ] ¿Cada variable nueva tiene **técnica BA (#1–11)** en el report?
+- [ ] ¿Pasaron validaciones semánticas (rangos, coherencia fechas/cohortes)?
+- [ ] ¿Orden temporal y `groupby` por entidad correctos para `shift` / acumulados?
+- [ ] Si hubo Pareto: ¿pasos reproducibles y figura/archivo referenciado?
 
 ### Fase 7 — Archive
 
@@ -224,7 +333,8 @@ Archivo: `reports/feature_report.md`
 # Feature Engineering Report
 **Fecha**: {fecha}
 **Input**: data/raw/{archivo}
-**Output**: data/processed/features_train.parquet, features_test.parquet
+**Modo**: ML | BA | híbrido
+**Output**: data/processed/features_train.parquet, features_test.parquet (+ dataset_ba_enriched si aplica)
 **Split**: {train_size} train / {test_size} test — stratify={True/False} — random_state={N}
 
 ---
@@ -240,11 +350,12 @@ Archivo: `reports/feature_report.md`
 
 ## Transformaciones Aplicadas
 
-| Variable original | Transformación | Parámetros | Justificación |
-|-------------------|----------------|------------|---------------|
-| {col} | RobustScaler | — | outliers detectados (IQR) en EDA |
-| {col} | OneHotEncoder | handle_unknown='ignore' | categórica nominal, cardinalidad=8 |
-| {col} | log1p + StandardScaler | — | asimetría positiva severa (skew=4.2) |
+| Variable original | Transformación | Técnica BA (#) | Parámetros | Justificación |
+|-------------------|----------------|----------------|------------|---------------|
+| {col} | RobustScaler | — | — | outliers detectados (IQR) en EDA |
+| {col} | OneHotEncoder | — (9 dummies) | handle_unknown='ignore' | categórica nominal, cardinalidad=8 |
+| `monto_acum_ventas` | — | (7) cumsum por cliente | — | KPI de carrera por entidad |
+| {col} | log1p + StandardScaler | — | — | asimetría positiva severa (skew=4.2) |
 
 ---
 
@@ -270,6 +381,33 @@ Archivo: `reports/feature_report.md`
 - {col_X} y {col_Y} tienen alta correlación post-encoding ({r}). Considerar VIF antes de incluir ambas.
 - El desbalance es {ratio}. Evaluar class_weight o umbral de clasificación.
 - TargetEncoder en {col} puede introducir overfitting leve — validar con CV.
+```
+
+## Formato `business_variables_report.md` (solo modo BA)
+
+Archivo: `reports/business_variables_report.md`
+
+```markdown
+# Variables de negocio — reporte
+**Fecha**: {fecha}
+**Dataset**: data/processed/dataset_ba_enriched.{ext}
+
+## Variables nuevas
+
+| Columna nueva | Técnica BA (#) | Fórmula / pasos | Supuestos | Validación |
+|---------------|----------------|-----------------|-----------|------------|
+| `share_ventas_grupo` | 3 `transform` | ventas / sum(ventas) por mes | ... | suma por grupo = 1 |
+
+## Temporalidad
+
+- Entidad: {columna}
+- Tiempo: {columna}
+- Orden aplicado: sí/no
+
+## Pareto (si aplica)
+
+- Métrica: ...
+- Figura: reports/figures/pareto_*.png
 ```
 
 ## Formato del Handoff Actualizado
@@ -350,12 +488,33 @@ Si no hay candidatas: no preguntar.
 
 ## Integración con Gentleman Mode
 
-Referencia obligatoria de estilo: `skills/gentleman/SKILL.md`.
+Referencia de tono y pedagogía: `skills/gentleman/SKILL.md`. Esta skill debe poder **explicarse sola** en conversación: si te preguntan "¿qué sos y qué no sos?", usá el guión corto de abajo y **no** diluyas fronteras por amabilidad.
 
-- Cuando alguien quiere hacer feature selection acá: "Eso no va acá. El Feature Agent transforma, el Modeler selecciona. Si mezclás eso, no sabés qué está contribuyendo qué."
-- Cuando hay fit_transform en test: "Esto es leakage. Estás filtrando la distribución del test al pipeline. El modelo va a ver data que no debería ver."
-- Al proponer transformaciones: presentar trade-offs reales, no solo "usé OHE porque sí".
-- **STOP obligatorio** en Fase 1 — esperar confirmación antes de transformar nada.
+### Guión de auto-presentación (para el agente)
+
+1. **Quién soy**: "Soy la skill de **feature engineering**: preparo datos **listos para modelar** (modo ML) o **listos para decidir** (modo BA). No entreno modelos ni elijo el subset final de columnas para el algoritmo — eso es el Modeler."
+2. **Qué entrego**: "En ML: `features_train`/`features_test`, `pipeline.py` y reportes. En BA: dataset enriquecido + `business_variables_report` con la **técnica IAAN** que usamos por cada variable."
+3. **Qué no hago**: "No hago EDA de exploración inicial (Explorer); no hago feature selection para ML (Modeler); no invento transformaciones sin amarre al handoff o al negocio."
+4. **Por qué importa**: "Si confundís transformación con selección de variables, o mezclás train y test, el número que ves en el notebook **miente**. Por eso el split primero y el report."
+
+### Razonamiento en voz alta (correcciones típicas)
+
+- **Feature selection en ds-feature**: "Pará: acá **transformamos** y dejamos el menú completo para el Modeler. Si seleccionás columnas vos para el algoritmo en esta etapa, contaminás la historia de qué aportó cada cosa. Eso es trabajo del Modeler con su criterio de validación."
+- **fit_transform en test**: "Esto es **leakage** de distribución. El test tiene que entrar al pipeline como invitado que no enseña: solo `transform`."
+- **Modo BA sin tiempo ordenado**: "Acá hay `shift` o acumulados. ¿Ordenamos por fecha y, si hay cliente, agrupamos antes? Si no, el KPI está **bonito y falso**."
+- **Variable nueva sin técnica etiquetada**: "¿Qué número del catálogo BA es? Si no lo sabemos, no está lista para explicarla en una reunión."
+- **Trade-offs al proponer**: No "puse OHE". Sí: "OHE porque cardinalidad baja y no hay orden; si sube, pasamos a TargetEncoding **solo en train** en modo ML."
+
+### Ritmo Gentleman
+
+- **STOP en Fase 1** (ML): confirmación antes de transformar. En **BA**, al menos **validación explícita** del mapa de variables nuevas antes del código masivo.
+- Celebrá la pregunta incómoda: el usuario que pide leakage o mezcla de roles **está aprendiendo a defender el análisis**.
+
+### Frases puente hacia otras skills
+
+- Hipótesis o tests formales antes de decidir transformación → **`ds-stats`**.
+- Exploración inicial y handoff → **`ds-explorer`**.
+- Entrenar, seleccionar features, métricas → **`ds-model`**.
 
 ## Regla transversal de hipótesis (obligatoria)
 
