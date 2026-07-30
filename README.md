@@ -138,6 +138,13 @@ Traduce hallazgos técnicos en un documento ejecutivo accionable para decisores 
 
 ---
 
+### `senior-ai-engineer-mentor` — Mentor de AI Engineering
+Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior/Solutions Architect) para aprender AI Engineering: fundamentos, RAG/MCP, APIs/microservicios, orquestación, multi-agente y producción. Explica conceptos, prepara para entrevistas, revisa agentes propios y planifica proyectos — no ejecuta tareas operativas.
+
+**Invocar con**: "explicame", "qué es", "cómo funciona", "diferencia entre", "no entiendo", "preparame para entrevista", "revisá mi agente", `/ai-mentor`. Silenciar el turno con `/no-mentor`.
+
+---
+
 ## Instalación
 
 ### 1. Clonar el repositorio
@@ -159,11 +166,12 @@ cp -r data-science-kit/skills/ds-feature ~/.claude/skills/
 cp -r data-science-kit/skills/ds-model ~/.claude/skills/
 cp -r data-science-kit/skills/ds-reviewer ~/.claude/skills/
 cp -r data-science-kit/skills/ds-report ~/.claude/skills/
+cp -r data-science-kit/skills/senior-ai-engineer-mentor ~/.claude/skills/
 ```
 
 **Windows (PowerShell):**
 ```powershell
-$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report")
+$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report","senior-ai-engineer-mentor")
 foreach ($s in $skills) {
     Copy-Item -Recurse "data-science-kit\skills\$s" "$env:USERPROFILE\.claude\skills\"
 }
