@@ -145,6 +145,13 @@ Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior
 
 ---
 
+### `senior-data-engineer-mentor` — Mentor de Data Engineering y APIs
+Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior/Solutions Architect) para Snowflake, dbt, Airflow, Azure DevOps, diseño de sistemas back/front, APIs y MCP. Explica conceptos, prepara para entrevistas, revisa modelos dbt / DAGs propios y planifica pipelines — no ejecuta tareas operativas.
+
+**Invocar con**: "explicame", "qué es", "cómo funciona", "por qué mi query es cara", "no entiendo", "preparame para entrevista", "revisá mi modelo dbt", "revisá este DAG", `/de-mentor`. Silenciar el turno con `/no-mentor`.
+
+---
+
 ## Instalación
 
 ### 1. Clonar el repositorio
@@ -154,6 +161,24 @@ git clone https://github.com/agus-chaud/data-science-kit.git
 ```
 
 ### 2. Copiar las skills al directorio de Claude Code
+
+Todas las skills disponibles:
+
+| Skill | macOS / Linux | Windows (PowerShell) |
+|---|---|---|
+| `ds-env-bootstrap` | `cp -r data-science-kit/skills/ds-env-bootstrap ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-env-bootstrap $env:USERPROFILE\.claude\skills\` |
+| `ds-planner` | `cp -r data-science-kit/skills/ds-planner ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-planner $env:USERPROFILE\.claude\skills\` |
+| `ds-explorer` | `cp -r data-science-kit/skills/ds-explorer ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-explorer $env:USERPROFILE\.claude\skills\` |
+| `ds-dq` | `cp -r data-science-kit/skills/ds-dq ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-dq $env:USERPROFILE\.claude\skills\` |
+| `ds-stats` | `cp -r data-science-kit/skills/ds-stats ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-stats $env:USERPROFILE\.claude\skills\` |
+| `ds-feature` | `cp -r data-science-kit/skills/ds-feature ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-feature $env:USERPROFILE\.claude\skills\` |
+| `ds-model` | `cp -r data-science-kit/skills/ds-model ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-model $env:USERPROFILE\.claude\skills\` |
+| `ds-reviewer` | `cp -r data-science-kit/skills/ds-reviewer ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-reviewer $env:USERPROFILE\.claude\skills\` |
+| `ds-report` | `cp -r data-science-kit/skills/ds-report ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-report $env:USERPROFILE\.claude\skills\` |
+| `senior-ai-engineer-mentor` | `cp -r data-science-kit/skills/senior-ai-engineer-mentor ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\senior-ai-engineer-mentor $env:USERPROFILE\.claude\skills\` |
+| `senior-data-engineer-mentor` | `cp -r data-science-kit/skills/senior-data-engineer-mentor ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\senior-data-engineer-mentor $env:USERPROFILE\.claude\skills\` |
+
+Instalá solo la que necesites, copiando su línea. O instalá todas de una:
 
 **macOS / Linux:**
 ```bash
@@ -167,11 +192,12 @@ cp -r data-science-kit/skills/ds-model ~/.claude/skills/
 cp -r data-science-kit/skills/ds-reviewer ~/.claude/skills/
 cp -r data-science-kit/skills/ds-report ~/.claude/skills/
 cp -r data-science-kit/skills/senior-ai-engineer-mentor ~/.claude/skills/
+cp -r data-science-kit/skills/senior-data-engineer-mentor ~/.claude/skills/
 ```
 
 **Windows (PowerShell):**
 ```powershell
-$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report","senior-ai-engineer-mentor")
+$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report","senior-ai-engineer-mentor","senior-data-engineer-mentor")
 foreach ($s in $skills) {
     Copy-Item -Recurse "data-science-kit\skills\$s" "$env:USERPROFILE\.claude\skills\"
 }
