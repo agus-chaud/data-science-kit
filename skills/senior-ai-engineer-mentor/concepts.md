@@ -1,4 +1,4 @@
-# Catálogo canónico de conceptos — 32 conceptos en 6 hitos
+# Catálogo canónico de conceptos — 36 conceptos en 7 hitos
 
 Este es el **catálogo finito** que la skill trackea. Cada slug es el `topic_key` usado en engram:
 `skill/ai-engineer-mentor/mastery/{slug}`.
@@ -7,6 +7,18 @@ Columna **Capítulo libro** referencia notebooks en `C:/Users/Dell/Agus/Ai Agent
 Columna **Gap externo** sólo se completa si el libro NO cubre bien el concepto.
 
 ---
+
+## Hito 0 — Integración práctica: webhook + agente en producción real (4)
+
+Hito práctico, sin capítulo en el libro (100% gap externo) — pensado para acompañar un TP/proyecto real de
+integración con una plataforma externa (mensajería, CRM, lo que sea), no solo el diseño del agente en sí.
+
+| Concepto (slug) | Hito | Descripción 1-línea | Capítulo libro | Gap externo |
+|---|---|---|---|---|
+| `webhook-vs-polling` | 0 | Cómo enterarte de eventos externos: push (webhook) vs pull (polling) — idempotencia y reintentos | — | Doc de reintentos del proveedor específico que estés integrando |
+| `agent-conversation-memory` | 0 | Usar el historial de una plataforma externa como memoria del agente, curado para no imitar artefactos de formato | — | — |
+| `tool-output-validation` | 0 | Validación server-side de argumentos de tool-calling antes de ejecutar efectos — el system prompt no es garantía | — | OWASP LLM Top 10 (Excessive Agency): https://genai.owasp.org/ |
+| `external-platform-auth-patterns` | 0 | API key vs sesión CLI/OAuth vs MCP — cuál usar según si hay un humano presente o el proceso es desatendido | — | Doc de secrets management del runtime que uses (Supabase, AWS, Vercel, etc.) |
 
 ## Hito 1 — Fundamentos (5)
 
@@ -72,8 +84,8 @@ Columna **Gap externo** sólo se completa si el libro NO cubre bien el concepto.
 
 ---
 
-## Total: 32 conceptos
+## Total: 36 conceptos
 
-Distribución: Hito 1 (5) + Hito 2 (6) + Hito 3 (5) + Hito 4 (5) + Hito 5 (5) + Hito 6 (6) = **32**.
+Distribución: Hito 0 (4) + Hito 1 (5) + Hito 2 (6) + Hito 3 (5) + Hito 4 (5) + Hito 5 (5) + Hito 6 (6) = **36**.
 
 Cualquier concepto fuera de esta lista no es trackeado por la skill (por diseño — granularidad fija evita scope creep). Si querés agregar uno, editá este archivo Y `SKILL.md` (mapa de hitos).

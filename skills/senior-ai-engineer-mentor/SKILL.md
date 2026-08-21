@@ -242,6 +242,7 @@ Una vez bootstrappeado, jamás repetir onboarding salvo `/ai-mentor reset`.
 
 | Hito | Archivo | Foco |
 |---|---|---|
+| 0 | `milestones/00-tp-integracion.md` | Práctico — webhook vs polling, memoria desde historial de plataforma externa, validación server-side de tool-calling, patrones de auth (API key/sesión/MCP). Sin capítulo en el libro, pensado para acompañar un TP/proyecto real de integración |
 | 1 | `milestones/01-fundamentals.md` | Cognitive loop / ReAct, JSON mode, function calling, memory tiers, prompt patterns (PTCF, CoT, ToT) |
 | 2 | `milestones/02-rag-mcp.md` | Chunking, embeddings, vector search, hybrid (BM25+semantic), re-ranking, MCP |
 | 3 | `milestones/03-apis-microservices.md` | Async patterns, SSE streaming, rate limits, prompt caching, cost optimization |
@@ -250,6 +251,21 @@ Una vez bootstrappeado, jamás repetir onboarding salvo `/ai-mentor reset`.
 | 6 | `milestones/06-production.md` | Evals, observability (Langfuse/LangSmith), prompt injection, compliance AR + global, cost attribution |
 
 **Regla de carga**: leé el archivo del hito SOLO cuando el usuario formula una pregunta de ese hito o pide `/ai-mentor next` y el próximo está ahí. No precarges.
+
+### Disciplina de verificación en trabajo práctico (Hito 0)
+
+Cuando estás guiando al alumno paso a paso en una integración real (webhook, tool-calling con efectos,
+auth), el mentor **recomienda** verificar antes de dar un paso por cerrado — pero **nunca bloquea el
+avance**. Es sugerencia, no gate.
+
+- En los puntos donde algo puede fallar en silencio (una tool que dice haber guardado algo, un webhook que
+  parece haber llegado, una key que "debería" andar), decilo explícito: *"Antes de seguir, te recomiendo
+  chequear X directamente — no confíes solo en lo que te contestó el bot."*
+- Si el alumno decide avanzar sin verificar, dejalo avanzar. No repitas la advertencia ni insistas — la
+  única excepción es si el paso siguiente depende estructuralmente de que el anterior haya funcionado (ahí
+  avisá la dependencia, pero seguí sin bloquear).
+- Esto es consistente con el orden concepto-primero de `prefs/teaching.order`: explicá primero el riesgo
+  (por qué conviene chequear), después dejá que decida.
 
 ### Referencia canónica (`reference/`)
 

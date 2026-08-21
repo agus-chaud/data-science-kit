@@ -152,6 +152,20 @@ Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior
 
 ---
 
+### `huyen-ai-engineering` — Knowledge base: AI Engineering (Chip Huyen)
+Base de conocimiento del libro *AI Engineering: Building Applications with Foundation Models* (O'Reilly). Foundation models, evaluación, prompt engineering, RAG, agentes, finetuning, dataset engineering, optimización de inferencia y arquitectura de aplicaciones de IA.
+
+**Invocar con**: aplicar frameworks del libro, o referenciar sus conceptos directamente.
+
+---
+
+### `ahmad-30-agents` — Knowledge base: 30 Agents Every AI Engineer Must Build (Imran Ahmad)
+Base de conocimiento del libro *30 Agents Every AI Engineer Must Build* (Packt, 2026). Cognitive loop, paradigmas reactivo/deliberativo/híbrido, framework de progresión agéntica, PTCF prompting, pipelines RAG, orquestación de tools, multi-agente, protocolos MCP/A2A, agentes éticos y explicables, y los 30 agentes nombrados del libro (decisión autónoma, planificación, memoria, retrieval, healthcare, financiero, educación, etc.).
+
+**Invocar con**: aplicar frameworks del libro, o construir cualquiera de los 30 agentes nombrados.
+
+---
+
 ## Instalación
 
 ### 1. Clonar el repositorio
@@ -177,6 +191,8 @@ Todas las skills disponibles:
 | `ds-report` | `cp -r data-science-kit/skills/ds-report ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ds-report $env:USERPROFILE\.claude\skills\` |
 | `senior-ai-engineer-mentor` | `cp -r data-science-kit/skills/senior-ai-engineer-mentor ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\senior-ai-engineer-mentor $env:USERPROFILE\.claude\skills\` |
 | `senior-data-engineer-mentor` | `cp -r data-science-kit/skills/senior-data-engineer-mentor ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\senior-data-engineer-mentor $env:USERPROFILE\.claude\skills\` |
+| `huyen-ai-engineering` | `cp -r data-science-kit/skills/huyen-ai-engineering ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\huyen-ai-engineering $env:USERPROFILE\.claude\skills\` |
+| `ahmad-30-agents` | `cp -r data-science-kit/skills/ahmad-30-agents ~/.claude/skills/` | `Copy-Item -Recurse data-science-kit\skills\ahmad-30-agents $env:USERPROFILE\.claude\skills\` |
 
 Instalá solo la que necesites, copiando su línea. O instalá todas de una:
 
@@ -193,11 +209,13 @@ cp -r data-science-kit/skills/ds-reviewer ~/.claude/skills/
 cp -r data-science-kit/skills/ds-report ~/.claude/skills/
 cp -r data-science-kit/skills/senior-ai-engineer-mentor ~/.claude/skills/
 cp -r data-science-kit/skills/senior-data-engineer-mentor ~/.claude/skills/
+cp -r data-science-kit/skills/huyen-ai-engineering ~/.claude/skills/
+cp -r data-science-kit/skills/ahmad-30-agents ~/.claude/skills/
 ```
 
 **Windows (PowerShell):**
 ```powershell
-$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report","senior-ai-engineer-mentor","senior-data-engineer-mentor")
+$skills = @("ds-env-bootstrap","ds-planner","ds-explorer","ds-dq","ds-stats","ds-feature","ds-model","ds-reviewer","ds-report","senior-ai-engineer-mentor","senior-data-engineer-mentor","huyen-ai-engineering","ahmad-30-agents")
 foreach ($s in $skills) {
     Copy-Item -Recurse "data-science-kit\skills\$s" "$env:USERPROFILE\.claude\skills\"
 }
