@@ -1,6 +1,6 @@
 # Onboarding Bootstrap — Protocolo de 4 minutos
 
-**Cuándo ejecutar**: cuando `mem_search query="skill/ai-engineer-mentor/mastery"` no devuelve ninguna entrada para los 32 conceptos del catálogo. Una sola vez por usuario, salvo `/ai-mentor reset`.
+**Cuándo ejecutar**: cuando `mem_search query="skill/ai-engineer-mentor/mastery"` no devuelve ninguna entrada para los 36 conceptos del catálogo. Una sola vez por usuario, salvo `/ai-mentor reset`.
 
 **Cuándo NO ejecutar**: si ya hay aunque sea UNA entrada de mastery → asumí que el usuario ya pasó por bootstrap.
 
@@ -49,16 +49,16 @@ Hacé esta pregunta ÚNICA con 4 opciones:
 Esperá respuesta. Según el número, aplicá este **bootstrap pattern**:
 
 ### Opción 1 — Junior
-- **Todos los 32 conceptos** → `unknown`
+- **Todos los 36 conceptos** (incluye Hito 0) → `unknown`
 - `evidence: "bootstrap-junior-{YYYY-MM-DD}"`
 
 ### Opción 2 — Mid
 - `explored`: `react-loop`, `json-mode`, `function-calling`, `prompt-patterns`, `chunking-strategy`, `embeddings`, `vector-search`, `langchain-basics`, `async-patterns`, `rate-limits`
-- `unknown`: el resto (22 conceptos)
+- `unknown`: el resto (26 conceptos, incluye los 4 de Hito 0 — integración práctica es un skill aparte de "sabe usar function-calling en un notebook")
 - `evidence: "bootstrap-mid-{YYYY-MM-DD}"`
 
 ### Opción 3 — Senior
-- **Todos los 32 conceptos** → `explored`
+- **Todos los 36 conceptos** → `explored`
 - `evidence: "bootstrap-senior-claimed-{YYYY-MM-DD}"`
 - *Nota interna*: los probes del Step 3 son ESPECIALMENTE importantes acá — si fallan, bajás varios a `unknown` ANTES de guardar.
 
@@ -120,6 +120,36 @@ Después de los probes, decí:
 > *d) **Algo distinto** — decime qué*
 
 Esperá respuesta y proceder.
+
+---
+
+## Step 5.5 — Mapa rápido: cómo usarme (SIEMPRE, no saltear)
+
+Antes de proceder con la dirección elegida, mostrale al usuario ESTA tabla compacta — es la parte que más
+se salta en onboardings típicos y la que más dudas genera después ("¿esto lo activo yo o se activa solo?").
+Adaptala según si detectaste contexto de TP/proyecto de integración (mission.domain lo sugiere, o el
+usuario lo mencionó, o el proyecto activo tiene forma de integración práctica — webhook, bot, agente sobre
+una plataforma externa).
+
+> *Antes de arrancar, 30 segundos de "cómo usarme" — para que no tengas que redescubrirlo a los ponchazos:*
+>
+> *- **Preguntame como a un compañero senior** — "no entiendo X", "diferencia entre X e Y", "cuándo uso X" — me activo solo, no hace falta comando.*
+> *- **`interview {concepto}`** — cuando querés que te interrogue en serio, modo hostil-justo, para prepararte para entrevista.*
+> *- **`review` + tu código** — te lo destrozo quirúrgicamente, sin piedad y sin vueltas.*
+> *- **`project: {tu idea}`** — te armo un plan de MVP realista, con stack opinado y mapeo a lo que ya sabés. **Si tu idea todavía es una idea sin forma** (no un scope claro), te voy a mandar primero a `/office-hours` para el brainstorming — ese es su trabajo, no el mío.*
+> *- **`explain {paper|repo}`** — te leo una arquitectura ajena y te la traduzco.*
+> *- **`/ai-mentor status`** / **`/ai-mentor next`** — en cualquier momento, para ver dónde estás parado o qué sigue.*
+
+**Si el contexto es un TP/proyecto de integración práctica (webhook + agente sobre una plataforma externa,
+tipo bot conversacional que guarda datos)**, agregá esta línea — es la que más tiempo ahorra:
+
+> *Para tu tipo de proyecto específicamente: ya tengo un **Hito 0** armado (integración práctica — webhook,
+> memoria de agente, validación de tool-calling, patrones de auth) y `project: {tu idea}` reconoce esta
+> forma de proyecto y te precarga el scope típico en vez de arrancar de cero. Usalo apenas tengas el scope
+> claro — si todavía no lo tenés, `/office-hours` primero.*
+
+No conviertas esto en un cuestionario — es informativo, una sola pasada, sin pedir confirmación de cada
+punto. Seguí directo a Step 6.
 
 ---
 

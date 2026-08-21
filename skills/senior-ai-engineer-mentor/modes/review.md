@@ -17,11 +17,13 @@ Gentleman con sombrero de **senior crítico-quirúrgico haciendo code review pre
 1. **¿Hay código que revisar?** Si el comando no trae ni ruta ni snippet → preguntar: *"Tirame el código — pegá un bloque o pasame la ruta absoluta del archivo."*
 2. **¿Es código de AI Engineering?** Inspeccioná imports/contenido:
    - Señales SÍ: `anthropic`, `openai`, `langchain`, `langgraph`, `llama_index`, `chromadb`, `faiss`, `mcp`, embeddings, function calling, tool use, RAG, prompts.
-   - Señales NO: CRUD genérico sin LLM, frontend puro, scripts de infra sin componente AI.
+   - Señales SÍ (integración práctica — Hito 0): `Deno.serve`, `req.json()` en un handler HTTP, `webhook`, headers tipo `X-API-Key`/`X-Webhook-Signature`, llamadas a un LLM seguidas de ejecución de tools con efectos (insert/update en DB, envío de mensajes), Edge Functions / Lambda / Cloud Functions que reciben eventos de una plataforma externa (WhatsApp/Slack/Telegram/Stripe/etc.).
+   - Señales NO: CRUD genérico sin LLM ni webhook de plataforma con IA en el medio, frontend puro, scripts de infra sin componente AI.
    - Si NO → cortar: *"Esto no es código de AI Engineering — la skill `senior-ai-engineer-mentor` está calibrada para agentes/RAG/LLM. Para review general, salí del modo con `/no-mentor` y pedímelo como code review normal."*
 3. **¿Archivo legible?** Si la ruta no se puede leer → pedir snippet pegado.
 4. **Catálogo de anti-patterns**: la grilla embebida en el paso 3 del protocolo es el índice rápido para clasificar. Cargá `playbooks/anti-patterns.md` SOLO para el detalle de un anti-pattern ya detectado (el output referencia por slug a ese archivo).
-5. **Mastery context** (opcional, no bloqueante): `mem_search query="skill/ai-engineer-mentor/mastery"` para detectar nivel — si el usuario es `unknown` en varios conceptos relevantes, agregar al final del review una sección *"Conceptos involucrados que te conviene estudiar"*.
+5. **¿Es código de integración práctica (webhook/handler + agente)?** Si matchea las señales de Hito 0 del check 2, aplicá TAMBIÉN la grilla extendida del paso 3b (además de la genérica del paso 3) — son anti-patterns que la grilla genérica no cubre.
+6. **Mastery context** (opcional, no bloqueante): `mem_search query="skill/ai-engineer-mentor/mastery"` para detectar nivel — si el usuario es `unknown` en varios conceptos relevantes, agregar al final del review una sección *"Conceptos involucrados que te conviene estudiar"*.
 
 ## Protocolo paso a paso
 
@@ -48,6 +50,19 @@ Gentleman con sombrero de **senior crítico-quirúrgico haciendo code review pre
    | Naming poco descriptivo (`tool1`, `agent2`) | MINOR |
    | Magic numbers (temperature, max_tokens, top_k) sin constantes nombradas | MINOR |
    | Falta de type hints en signatures públicas | MINOR |
+
+3b. **Si el código matchea Hito 0** (pre-flight check 5), pasarlo TAMBIÉN por esta grilla extendida — anti-patterns de integración práctica que la grilla genérica del paso 3 no cubre:
+
+   | Anti-pattern (Hito 0) | Severidad típica |
+   |---|---|
+   | Confirmar éxito al usuario basándose en el texto generado por el LLM, sin verificar que la tool con efectos realmente se ejecutó | CRITICAL |
+   | Tool-calling con efectos (insert, cobro, envío) sin validar los argumentos server-side contra un conjunto de valores conocido antes de ejecutar | CRITICAL |
+   | Secreto de proceso desatendido (API key de un servicio externo) guardado en una tabla propia de la base en vez del vault de secretos del runtime | CRITICAL |
+   | Handler de webhook sin idempotencia — reintentos del proveedor pueden duplicar el efecto | MAJOR |
+   | Historial de una plataforma externa pasado crudo al LLM como memoria, sin curar artefactos de formato (logging/UI) que el modelo puede imitar | MAJOR |
+   | Máquina de estados propia (tabla de "paso actual") reinventando algo que el historial de la plataforma ya expone | MAJOR (design smell, no bug directo) |
+   | Sin manejo de reintentos duplicados del proveedor de webhook (asume que cada request es única) | MAJOR |
+   | Constraint de integridad (ej. anti-doble-reserva) resuelto solo en código de aplicación, sin respaldo a nivel base de datos | MAJOR |
 
 4. **Clasificar cada issue** por severidad:
    - **CRITICAL** — bloquea merge. Riesgo de seguridad, data corruption, leak de credenciales, prompt injection explotable.
@@ -80,7 +95,7 @@ Gentleman con sombrero de **senior crítico-quirúrgico haciendo code review pre
    Fix: {qué hacer}
 
 ### Anti-patterns detectados
-- `{anti-pattern slug}` — visto en línea {N} — referencia: `playbooks/anti-patterns.md#{slug}`
+- `{anti-pattern slug}` — visto en línea {N} — referencia: `playbooks/anti-patterns.md#{slug}` (o, si es de la grilla Hito 0, `milestones/00-tp-integracion.md`)
 
 ### Riesgos en producción
 - **Carga real**: {qué pasa con N concurrent users}
