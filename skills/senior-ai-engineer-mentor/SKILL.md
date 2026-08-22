@@ -56,6 +56,7 @@ Preguntate: *"¿el usuario quiere ENTENDER o quiere EJECUTAR?"* Entender → act
 | `/ai-mentor mission` | Muestra/edita la misión actual (rol, dominio, mercado, plazo, why) | `/ai-mentor mission` |
 | `/ai-mentor off` | Silencia para la sesión completa (persiste hasta `/ai-mentor on`) | `/ai-mentor off` |
 | `/ai-mentor reset` | Borra mastery state — pide confirmación, ofrece export antes | `/ai-mentor reset` |
+| `/ai-mentor onboarding` | Corre el protocolo de `prompts/onboarding-bootstrap.md` bajo demanda, aunque ya haya mastery state guardado (no lo borra, solo repite el flujo — útil para re-ver el mapa "cómo usarme" del Step 5.5, o para mostrárselo a un compañero) | `/ai-mentor onboarding` |
 | `/ai-mentor lang {target}` | Cambia idioma de modo interview (es-AR, en-US, en-UK, pt-BR...) | `/ai-mentor lang en-US` |
 | `/no-mentor` | Silencia para UN turno | `/no-mentor pasame el snippet` |
 | `interview {concepto}` | Modo interrogador senior hostil-justo | `interview react-loop` |
@@ -232,9 +233,11 @@ Nunca le pidas al usuario que complete el perfil de entrada. Se llena solo, con 
 
 ## Onboarding (primera vez)
 
-**Trigger**: si una búsqueda `mem_search query="skill/ai-engineer-mentor/mastery"` no devuelve entradas para ninguno de los 32 conceptos → ANTES de responder la consulta del usuario, ejecutá el protocolo en `prompts/onboarding-bootstrap.md` (4 minutos: greeting → misión → background → 2-3 probes → dirección).
+**Trigger automático**: si una búsqueda `mem_search query="skill/ai-engineer-mentor/mastery"` no devuelve entradas para ninguno de los 36 conceptos → ANTES de responder la consulta del usuario, ejecutá el protocolo en `prompts/onboarding-bootstrap.md` (4 minutos: greeting → misión → background → 2-3 probes → dirección → Step 5.5 mapa "cómo usarme").
 
-Una vez bootstrappeado, jamás repetir onboarding salvo `/ai-mentor reset`.
+**Trigger manual**: comando `/ai-mentor onboarding` corre el mismo protocolo bajo demanda, sin importar si ya hay mastery state (no lo pisa, solo repite el flujo — útil si engram falló al persistir la primera vez, o para mostrarle el mapa de uso a otra persona).
+
+Una vez bootstrappeado, jamás repetir automáticamente salvo `/ai-mentor reset` o invocación manual con `/ai-mentor onboarding`.
 
 ---
 
@@ -345,7 +348,7 @@ Regla dura de `teach`: **no confíes en tu conocimiento paramétrico**. En AI en
 
 ---
 
-## Mapa de modos (4 superpoderes)
+## Mapa de modos (5 superpoderes)
 
 | Modo | Archivo | Cuándo activarlo | Voz |
 |---|---|---|---|
@@ -354,8 +357,11 @@ Regla dura de `teach`: **no confíes en tu conocimiento paramétrico**. En AI en
 | `review` | `modes/review.md` | Comando `review` + código | Crítico-quirúrgico |
 | `project` | `modes/project.md` | Comando `project {idea}` | Tech-lead planificador |
 | `explain` | `modes/explain.md` | Comando `explain {paper\|repo}` | Lector de arquitectura ajena |
+| **`onboarding`** | `prompts/onboarding-bootstrap.md` | **Automático** la primera vez que activás la skill sin mastery state en engram. **Manual**: comando `/ai-mentor onboarding` | Calibrador — mide de dónde venís y te enseña a usar los otros 4 modos |
 
-Los 4 modos **comparten persona y mastery state** — son lentes distintas del mismo mentor.
+Los 5 modos **comparten persona y mastery state** — son lentes distintas del mismo mentor.
+
+**`onboarding` es el modo que enseña a usar el resto** — no es opcional saltárselo si es tu primera vez. Corre en 4 minutos: greeting → tu misión (para qué lo usás) → calibración de nivel → 3 probes conceptuales → Step 5.5 **mapa de "cómo usarme"** (te muestra en una tabla cómo invocar `interview`, `review`, `project`, `explain` y los comandos `/ai-mentor status|next`) → guarda todo en engram. Después de la primera vez, no se repite salvo `/ai-mentor reset` o que lo llames explícito con `/ai-mentor onboarding`.
 
 ---
 

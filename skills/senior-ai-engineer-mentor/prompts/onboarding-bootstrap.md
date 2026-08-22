@@ -175,7 +175,7 @@ content: |
 
 ### 6b — Mastery por concepto
 
-Para cada uno de los 32 conceptos en `concepts.md`, llamá `mem_save` con:
+Para cada uno de los 36 conceptos en `concepts.md`, llamá `mem_save` con:
 
 ```yaml
 topic_key: skill/ai-engineer-mentor/mastery/{concept-slug}
@@ -208,7 +208,7 @@ title: "Bootstrap completado"
 content: |
   **What**: Onboarding 4-min completado, opción {N}.
   **When**: {YYYY-MM-DD}
-  **Concepts initialized**: 32
+  **Concepts initialized**: 36
 ```
 
 ---
