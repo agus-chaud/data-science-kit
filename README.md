@@ -139,7 +139,9 @@ Traduce hallazgos técnicos en un documento ejecutivo accionable para decisores 
 ---
 
 ### `senior-ai-engineer-mentor` — Mentor de AI Engineering
-Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior/Solutions Architect) para aprender AI Engineering: fundamentos, RAG/MCP, APIs/microservicios, orquestación, multi-agente y producción. Explica conceptos, prepara para entrevistas, revisa agentes propios y planifica proyectos — no ejecuta tareas operativas.
+Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior/Solutions Architect) para aprender AI Engineering: fundamentos, RAG/MCP, APIs/microservicios, orquestación, multi-agente y producción. Cubre **36 conceptos en 7 hitos** (Hito 0 = integración práctica tipo webhook/bot sobre plataforma externa — el caso del TP1 de WhatsApp de IAAN). Trackea tu nivel por concepto con repaso espaciado. Cinco modos: `onboarding` (calibra tu nivel y te enseña a usar el resto — corre solo la primera vez, o a mano con `/ai-mentor onboarding`), `interview`, `review`, `project`, `explain`.
+
+**Requiere `engram`** (memoria MCP persistente) para guardar tu progreso entre sesiones — instalalo con `gentle-ai install`. Sin esto, la skill funciona pero no se acuerda de vos. Detalle completo, guía paso a paso para el TP1 de WPP e instrucciones de engram/gentle-ai: [`skills/senior-ai-engineer-mentor/README.md`](skills/senior-ai-engineer-mentor/README.md).
 
 **Invocar con**: "explicame", "qué es", "cómo funciona", "diferencia entre", "no entiendo", "preparame para entrevista", "revisá mi agente", `/ai-mentor`. Silenciar el turno con `/no-mentor`.
 
@@ -150,6 +152,8 @@ Skill transversal, no forma parte del pipeline `ds-*`. Mentor activo (voz Senior
 
 **Invocar con**: "explicame", "qué es", "cómo funciona", "por qué mi query es cara", "no entiendo", "preparame para entrevista", "revisá mi modelo dbt", "revisá este DAG", `/de-mentor`. Silenciar el turno con `/no-mentor`.
 
+Detalle completo: [`skills/senior-data-engineer-mentor/README.md`](skills/senior-data-engineer-mentor/README.md).
+
 ---
 
 ### `huyen-ai-engineering` — Knowledge base: AI Engineering (Chip Huyen)
@@ -157,12 +161,16 @@ Base de conocimiento del libro *AI Engineering: Building Applications with Found
 
 **Invocar con**: aplicar frameworks del libro, o referenciar sus conceptos directamente.
 
+Detalle completo: [`skills/huyen-ai-engineering/README.md`](skills/huyen-ai-engineering/README.md).
+
 ---
 
 ### `ahmad-30-agents` — Knowledge base: 30 Agents Every AI Engineer Must Build (Imran Ahmad)
 Base de conocimiento del libro *30 Agents Every AI Engineer Must Build* (Packt, 2026). Cognitive loop, paradigmas reactivo/deliberativo/híbrido, framework de progresión agéntica, PTCF prompting, pipelines RAG, orquestación de tools, multi-agente, protocolos MCP/A2A, agentes éticos y explicables, y los 30 agentes nombrados del libro (decisión autónoma, planificación, memoria, retrieval, healthcare, financiero, educación, etc.).
 
 **Invocar con**: aplicar frameworks del libro, o construir cualquiera de los 30 agentes nombrados.
+
+Detalle completo: [`skills/ahmad-30-agents/README.md`](skills/ahmad-30-agents/README.md).
 
 ---
 
