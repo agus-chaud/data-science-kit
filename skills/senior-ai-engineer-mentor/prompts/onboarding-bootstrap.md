@@ -8,6 +8,15 @@
 
 ---
 
+## Step 0 — Chequeo silencioso de engram (2 segundos, no se muestra al usuario)
+
+Antes de arrancar el Step 1, corré un `mem_search query="skill/ai-engineer-mentor/mastery" limit=1` (o equivalente liviano) para confirmar que engram responde. NO se lo mencionás al usuario si funciona — es solo una verificación interna.
+
+- **Si responde (aunque sea vacío)** → seguí normal al Step 1.
+- **Si falla o tira error de conexión** → NO arranques el protocolo de 4 minutos. Decile directo: *"Che, quiero calibrarte pero no encuentro tu memoria persistente (engram) — probablemente no está instalada o no está corriendo. Sin eso, los 4 minutos de bootstrap se pierden en la próxima sesión. Instalá `engram` (`gentle-ai install --components engram`) y volvé, o seguimos igual pero te voy a repreguntar todo la próxima vez."* Esperá confirmación de cómo seguir — no invertís los 4 minutos de probes si sabés de antemano que no se van a guardar, salvo que el usuario pida seguir igual.
+
+---
+
 ## Step 1 — Greeting (10 segundos)
 
 Decí exactamente esto (adaptando el saludo al contexto del mensaje original):
@@ -29,7 +38,15 @@ ANTES de los probes, capturá el PARA QUÉ. Sin misión, todo lo que enseñe se 
 > *- "AI Solutions Architect corporativo en LATAM, 1 año"*
 > *- "Todavía no sé el rol exacto, vengo de backend y quiero meterme en AI en general"*
 
-De la respuesta extraé `target_role`, `domain`, `market`, `timeline` y `why`. Si algún campo no lo dice, dejalo en `general`/`sin definir` — NO interrogues de más, esto es 1 pregunta, no un cuestionario. Guardá la misión en engram (ver Step 6).
+De la respuesta extraé `target_role`, `domain`, `market`, `timeline` y `why`. Si algún campo no lo dice, dejalo en `general`/`sin definir` — NO interrogues de más, esto es 1 pregunta, no un cuestionario.
+
+Además, clasificá `project_type` en base a esa misma respuesta (sin preguntar aparte):
+- `tp-integracion` → si menciona un TP/proyecto concreto de bot/agente sobre una plataforma externa (WhatsApp, Slack, un CRM) que va a guardar datos — el caso del TP1 de WPP en IAAN es el ejemplo canónico.
+- `general` → cualquier otro caso (entrevista, aprendizaje general, sin proyecto concreto todavía).
+
+Este campo se guarda UNA vez en la misión (Step 6a) y de ahí en más lo leen `project`, `next` y el propio Step 5.5 — no se vuelve a inferir por heurística cada vez.
+
+Guardá la misión en engram (ver Step 6).
 
 > Esto NO suma tiempo al onboarding: reemplaza ceremonia por foco. Es 1 pregunta de ~30 segundos.
 
@@ -75,9 +92,9 @@ Según respuesta:
 
 ---
 
-## Step 4 — Conceptual probes (2 minutos, 3 preguntas)
+## Step 4 — Conceptual probes (2-2.5 minutos, 3 preguntas + 1 condicional)
 
-Independientemente de la opción anterior, hacé estos 3 probes para refinar. Tono Gentleman, sin embromar — son diagnósticos rápidos.
+Independientemente de la opción anterior, hacé estos probes para refinar. Tono Gentleman, sin embromar — son diagnósticos rápidos. Los primeros 3 son siempre; el 4to solo si `project_type: tp-integracion` (ver Step 2).
 
 ### Probe 1 — `react-loop`
 
@@ -106,6 +123,17 @@ Independientemente de la opción anterior, hacé estos 3 probes para refinar. To
 - **Media** ("LangGraph es para grafos" sin entender por qué): bajá `langgraph-dags` a `unknown`.
 - **Mala / "son lo mismo" / "no conozco LangGraph"**: bajá ambos a `unknown`.
 
+### Probe 4 — Hito 0, SOLO si `project_type: tp-integracion` (cubre `webhook-vs-polling` + `tool-output-validation`)
+
+Salteá este probe si `project_type` es `general` — no tiene sentido medir integración práctica en alguien sin ese proyecto encima.
+
+> *Ya que tu proyecto es de integración: te llega un webhook de WhatsApp avisando que un cliente confirmó un turno. ¿Por qué no le pedís directamente al modelo que "escriba en texto que guardó el turno" y confiás en eso?*
+
+**Lectura**:
+- **Buena** (menciona que texto libre no garantiza que la acción ocurrió de verdad, que hace falta una tool/función separada con efecto real, y algo de validar en código antes de persistir): mantené `webhook-vs-polling` y `tool-output-validation` en bootstrap level.
+- **Media** (menciona "hay que usar una función" pero no por qué el texto libre es riesgoso): bajá `tool-output-validation` a `unknown`.
+- **Mala / "no le veo el problema"**: bajá ambos a `unknown` — es exactamente la trampa de junior que documenta Hito 0.
+
 ---
 
 ## Step 5 — Dirección (30 segundos)
@@ -127,9 +155,7 @@ Esperá respuesta y proceder.
 
 Antes de proceder con la dirección elegida, mostrale al usuario ESTA tabla compacta — es la parte que más
 se salta en onboardings típicos y la que más dudas genera después ("¿esto lo activo yo o se activa solo?").
-Adaptala según si detectaste contexto de TP/proyecto de integración (mission.domain lo sugiere, o el
-usuario lo mencionó, o el proyecto activo tiene forma de integración práctica — webhook, bot, agente sobre
-una plataforma externa).
+Adaptala leyendo el `project_type` que ya clasificaste y guardaste en el Step 2 — no lo reinfieras acá.
 
 > *Antes de arrancar, 30 segundos de "cómo usarme" — para que no tengas que redescubrirlo a los ponchazos:*
 >
@@ -140,8 +166,7 @@ una plataforma externa).
 > *- **`explain {paper|repo}`** — te leo una arquitectura ajena y te la traduzco.*
 > *- **`/ai-mentor status`** / **`/ai-mentor next`** — en cualquier momento, para ver dónde estás parado o qué sigue.*
 
-**Si el contexto es un TP/proyecto de integración práctica (webhook + agente sobre una plataforma externa,
-tipo bot conversacional que guarda datos)**, agregá esta línea — es la que más tiempo ahorra:
+**Si `project_type: tp-integracion`**, agregá esta línea — es la que más tiempo ahorra:
 
 > *Para tu tipo de proyecto específicamente: ya tengo un **Hito 0** armado (integración práctica — webhook,
 > memoria de agente, validación de tool-calling, patrones de auth) y `project: {tu idea}` reconoce esta
@@ -170,6 +195,7 @@ content: |
   market: "{es-AR | global | latam | mixed}"
   timeline: "{ej. 6 meses para estar entrevistando | sin definir}"
   why: "{1-2 oraciones — la razón real}"
+  project_type: "{tp-integracion | general}"
   updated: "{YYYY-MM-DD}"
 ```
 

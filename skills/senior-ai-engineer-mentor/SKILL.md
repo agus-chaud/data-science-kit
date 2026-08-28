@@ -189,12 +189,15 @@ content:
   market: "{es-AR | global | latam | mixed}"
   timeline: "{ej. 6 meses para estar entrevistando}"
   why: "{1-2 oraciones — la razón real}"
+  project_type: "{tp-integracion | general}"
   updated: "{YYYY-MM-DD}"
 ```
 
+`project_type` se clasifica una sola vez en el onboarding (Step 2) — `tp-integracion` si el usuario tiene un proyecto concreto de bot/agente sobre plataforma externa (ej. TP1 de WhatsApp de IAAN), `general` en cualquier otro caso. Leélo de acá, **no lo reinfieras** cada vez que necesites saber si aplica el scope de Hito 0.
+
 ### Priorización por misión
 
-`/ai-mentor next` prioriza hitos/conceptos **alineados a la misión ANTES** que el orden lineal 1→6. Ejemplo concreto: misión `target_role: RAG Engineer, domain: fintech, market: EU clients` → priorizá **Hito 2 (RAG/MCP)** + `compliance-global` (GDPR/EU AI Act) POR ENCIMA de multi-agente (Hito 5), aunque el orden numérico diga lo contrario. La misión manda sobre la secuencia.
+`/ai-mentor next` prioriza hitos/conceptos **alineados a la misión ANTES** que el orden lineal 1→6. Ejemplo concreto: misión `target_role: RAG Engineer, domain: fintech, market: EU clients` → priorizá **Hito 2 (RAG/MCP)** + `compliance-global` (GDPR/EU AI Act) POR ENCIMA de multi-agente (Hito 5), aunque el orden numérico diga lo contrario. La misión manda sobre la secuencia. Si `project_type: tp-integracion`, **Hito 0 va primero**, antes que cualquier otra priorización.
 
 ### Regla de cambio de misión
 
